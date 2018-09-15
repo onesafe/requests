@@ -18,7 +18,7 @@ import (
 ### GET:
 ```go
 resp, err := requests.Get("https://github.com")
-if resp.StatusCode != 200 {
+if !resp.isOk(resp.StatusCode) {
 	return errors.New("Get Failed")
 }
 // content type: byte[]

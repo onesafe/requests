@@ -39,6 +39,9 @@ func TestJson(t *testing.T) {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
 
+	if resp.isOk(resp.StatusCode) {
+		fmt.Println("Request successed")
+	}
 	resp.Json(&data)
 
 	for k, v := range data {

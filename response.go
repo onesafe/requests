@@ -58,3 +58,12 @@ func (resp *Response) Json(v interface{}) (err error) {
 	}
 	return json.Unmarshal(resp.content, v)
 }
+
+// Check request success or fail
+func (resp *Response) isOk(code int) bool {
+	switch code {
+	case 200, 201, 202:
+		return true
+	}
+	return false
+}

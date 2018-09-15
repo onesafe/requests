@@ -15,7 +15,7 @@ func TestGet(t *testing.T) {
 	fmt.Println(resp.StatusCode)
 	fmt.Println(resp.Header)
 
-	if resp.StatusCode != 200 {
+	if !resp.isOk(resp.StatusCode) {
 		t.Error("Simple Get Failed")
 	}
 }
