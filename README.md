@@ -24,8 +24,10 @@ if !resp.isOk(resp.StatusCode) {
 }
 // content type: byte[]
 content, err := resp.Content()
+
 // text type: string
 text, err := resp.Text()
+
 // data type can be: map[string]interface{}
 err = resp.Json(&data)
 ```
