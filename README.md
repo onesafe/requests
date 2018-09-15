@@ -3,7 +3,7 @@
 # requests
 Go HTTP Requests for Humans
 
-# Installation
+## Installation
 ```
 go get -u github.com/onesafe/requests
 ```
