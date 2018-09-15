@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"encoding/json"
 	"compress/zlib"
 	"compress/gzip"
 	"io"
@@ -39,4 +40,21 @@ func (resp *Response) Content() (b []byte, err error) {
 	}
 
 	return resp.content, nil
+}
+
+// Text return Response Body as string
+func (resp *Response) Text() (text string, err error) {
+	if resp.content == nil {
+		_, err = resp.Content()
+	}
+	text = string(resp.content)
+	return
+}
+
+// Json return Response Body as Json
+func (resp *Response) Json(v interface{}) (err error) {
+	if resp.content == nil {
+		_, err = resp.Content()
+	}
+	return json.Unmarshal(resp.content, v)
 }

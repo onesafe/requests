@@ -16,6 +16,32 @@ func TestContent(t *testing.T) {
 	if err != nil {
 		t.Error(err.Error())
 	}
-	fmt.Println(Content)
-	fmt.Println(resp.content)
+	fmt.Println(Content[0])
+	//fmt.Println(resp.content)
+}
+
+func TestText(t *testing.T) {
+	url := "https://httpbin.org"
+	resp, err := Get(url)
+	if err != nil {
+		fmt.Println("[GET] Failed while request url: " + url)
+	}
+
+	resp.Text()
+}
+
+func TestJson(t *testing.T) {
+	url := "https://httpbin.org/json"
+	var data map[string]interface{}
+
+	resp, err := Get(url)
+	if err != nil {
+		fmt.Println("[GET] Failed while request url: " + url)
+	}
+
+	resp.Json(&data)
+
+	for k, v := range data {
+		fmt.Println(k, v)
+	}
 }
