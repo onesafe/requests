@@ -9,18 +9,21 @@ import (
 type Request struct {
 	Req       *http.Request
 	Client    *http.Client
-	Headers   map[string]string
 }
+
+type Headers map[string]string
 
 var (
 	client *http.Client
+	req    *http.Request
 )
 
 func NewRequest() *Request{
 	if client == nil {
 		client = new(http.Client)
 	}
-	return &Request{Client: client}
+	
+	return &Request{ Client: client }
 }
 
 // GET 
@@ -61,6 +64,8 @@ func (r *Request) buildHTTPRequest(method string, url string, args ...interface{
 	if r.Req, err = http.NewRequest(method, url, body); err != nil {
 		return err
 	}
+
+	buildHeaders(r, args)
 
 	return
 }
