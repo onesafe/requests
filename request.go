@@ -12,6 +12,7 @@ type Request struct {
 }
 
 type Headers map[string]string
+type Params  map[string]string
 
 var (
 	client *http.Client
@@ -66,6 +67,7 @@ func (r *Request) buildHTTPRequest(method string, url string, args ...interface{
 	}
 
 	buildHeaders(r, args)
+	buildURLParams(r, url, args)
 
 	return
 }
