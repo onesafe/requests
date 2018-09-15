@@ -23,4 +23,8 @@ if resp.StatusCode != 200 {
 }
 // content type: byte[]
 content, err := resp.Content()
+// text type: string
+text, err := resp.Text()
+// data type can be: map[string]interface{}
+err = resp.Json(&data)
 ```
