@@ -36,7 +36,7 @@ err = resp.Json(&data)
 ```go
 url := "https://www.baidu.com"
 	
-h := Headers{
+h := requests.Headers{
 	"Referer":           "http://github.com",
 	"Accept-Language":   "zh-CN,zh;",
 	"Content-Type":      requests.ContentTypeJsonType,
@@ -46,9 +46,10 @@ resp, err := requests.Get(url, h)
 
 ### Set Params
 ```go
-p := Params{
+url := "https://github.com"
+
+p := requests.Params{
 	"user":	"onesafe",
 }
-
-resp, err := Get("https://github.com", p)
+resp, err := requests.Get(url, p)
 ```
