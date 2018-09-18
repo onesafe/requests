@@ -7,7 +7,9 @@ import (
 
 func TestGet(t *testing.T) {
 	url := "https://www.baidu.com"
-	resp, err := Get(url)
+
+	var n TimeOut = 10
+	resp, err := Get(url, n)
 	if err != nil {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
