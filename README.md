@@ -43,3 +43,12 @@ h := Headers{
 }
 resp, err := requests.Get(url, h)
 ```
+
+### Set Params
+```go
+p := Params{
+	"user":	"onesafe",
+}
+
+resp, err := Get("https://github.com", p)
+```
