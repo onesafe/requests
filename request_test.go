@@ -32,6 +32,7 @@ func TestRequestGet(t *testing.T) {
 		t.Error("Simple Get Failed")
 	}
 
+	r.Reset()
 	fmt.Println(resp.Status)
 }
 

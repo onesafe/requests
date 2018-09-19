@@ -35,7 +35,7 @@ type BasicAuth struct {
 }
 
 var (
-	client       *http.Client
+	_CLIENT      *http.Client
 	req          *http.Request
 	maxIdleConns int = 10
 )
@@ -43,19 +43,19 @@ var (
 func NewRequest() *Request {
 	args := &Args{}
 
-	if client != nil {
-		return &Request{Client: client, Args: args}
+	if _CLIENT != nil {
+		return &Request{Client: _CLIENT, Args: args}
 	}
 
 	transport := &http.Transport{
 		MaxIdleConns:    maxIdleConns,
 		IdleConnTimeout: 30 * time.Second,
 	}
-	client = &http.Client{
+	_CLIENT = &http.Client{
 		Transport: transport,
 	}
 
-	return &Request{Client: client, Args: args}
+	return &Request{Client: _CLIENT, Args: args}
 }
 
 // GET
@@ -164,4 +164,16 @@ func (r *Request) SetTimeout(n time.Duration) {
 // Set Basic Auth
 func (r *Request) SetBasicAuth(Username string, Password string) {
 	r.Req.SetBasicAuth(Username, Password)
+}
+
+// Reset client and Args to default values
+func (r *Request) Reset() {
+	_CLIENT = nil
+
+	r.Headers = nil
+	r.Params = nil
+	r.Datas = nil
+	r.Proxy = ""
+	r.BasicAuth = BasicAuth{}
+	return
 }
