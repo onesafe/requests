@@ -17,7 +17,7 @@ import (
 
 ### GET
 ```go
-r := NewRequest()
+r := requests.NewRequest()
 
 resp, err := r.Get("https://github.com")
 if !resp.isOk(resp.StatusCode) {
@@ -27,7 +27,7 @@ if !resp.isOk(resp.StatusCode) {
 
 ### POST
 ```go
-r := NewRequest()
+r := requests.NewRequest()
 
 r.Datas = requests.DATAS{
 	"name": "test"
@@ -52,11 +52,12 @@ err = resp.Json(&data)
   - Set Headers
   - Set Params
   - Set TimeOut
+  - Auth
 
 
 ### Set Headers
 ```go
-r := NewRequest()
+r := requests.NewRequest()
 
 r.Headers = requests.HEADERS{
 	"Referer":           "http://github.com",
@@ -68,7 +69,7 @@ resp, err := r.Get("https://www.baidu.com")
 
 ### Set Params
 ```go
-r := NewRequest()
+r := requests.NewRequest()
 
 r.Params = requests.PARAMS{
 	"user":	"onesafe",
@@ -78,9 +79,17 @@ resp, err := r.Get("https://github.com")
 
 ### Set TimeOut
 ```go
-r := NewRequest()
+r := requests.NewRequest()
 
 r.SetTimeout(10) // 10 Seconds
 resp, err := r.Get("https://github.com")
+```
+
+### Auth
+```go
+r := requests.NewRequest()
+
+r.BasicAuth = requests.BasicAuth{"user", "passwd"}
+resp, err := r.Get("http://httpbin.org/basic-auth/user/passwd")
 ```
 
