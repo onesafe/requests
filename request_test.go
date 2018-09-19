@@ -21,3 +21,15 @@ func TestGet(t *testing.T) {
 		t.Error("Simple Get Failed")
 	}
 }
+
+func TestPost(t *testing.T) {
+	url := "https://www.httpbin.org/post"
+
+	data := Datas{
+		"name": "post_test",
+	}
+
+	resp, _ := Post(url, data)
+	d, _ := resp.Text()
+	fmt.Println(d)
+}

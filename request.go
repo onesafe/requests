@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
+	"strings"
 	"time"
 )
 
@@ -15,6 +17,7 @@ type Request struct {
 type Headers map[string]string
 type Params map[string]string
 type TimeOut time.Duration
+type Datas map[string]string
 
 var (
 	client *http.Client
@@ -32,6 +35,12 @@ func NewRequest() *Request {
 // GET
 func Get(url string, args ...interface{}) (resp *Response, err error) {
 	resp, err = request("GET", url, args)
+	return
+}
+
+// POST
+func Post(url string, args ...interface{}) (resp *Response, err error) {
+	resp, err = request("POST", url, args)
 	return
 }
 
@@ -58,10 +67,8 @@ func request(method string, url string, args ...interface{}) (resp *Response, er
 func (r *Request) buildHTTPRequest(method string, url string, args ...interface{}) (err error) {
 	var body io.Reader
 
-	if method != "GET" {
-		if body, err = r.buildBody(args); err != nil {
-			return err
-		}
+	if body, err = r.buildBody(args); err != nil {
+		return err
 	}
 
 	if r.Req, err = http.NewRequest(method, url, body); err != nil {
@@ -77,7 +84,26 @@ func (r *Request) buildHTTPRequest(method string, url string, args ...interface{
 }
 
 func (r *Request) buildBody(args ...interface{}) (body io.Reader, err error) {
-	return nil, err
+	datas := []map[string]string{}
+
+	for _, arg := range args {
+		switch customType := arg.(type) {
+		case Datas:
+			datas = append(datas, customType)
+		}
+	}
+
+	// build post Form data
+	Forms := url.Values{}
+	for _, data := range datas {
+		for key, value := range data {
+			Forms.Add(key, value)
+		}
+	}
+
+	// build body
+	body = strings.NewReader(Forms.Encode())
+	return body, err
 }
 
 func SetTimeout(r *Request, args ...interface{}) {
