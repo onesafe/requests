@@ -48,6 +48,12 @@ var data map[string]string
 err = resp.Json(&data)
 ```
 
+# Feature Support
+  - Set Headers
+  - Set Params
+  - Set TimeOut
+
+
 ### Set Headers
 ```go
 r := NewRequest()
