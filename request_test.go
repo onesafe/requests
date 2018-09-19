@@ -24,6 +24,19 @@ func TestGet(t *testing.T) {
 	}
 }
 
+func TestRequestGet(t *testing.T) {
+	url := "https://www.baidu.com"
+
+	r := NewRequest()
+
+	resp, _ := r.Get(url)
+	if !resp.isOk(resp.StatusCode) {
+		t.Error("Simple Get Failed")
+	}
+
+	fmt.Println(resp.Status)
+}
+
 func TestPost(t *testing.T) {
 	url := "https://www.httpbin.org/post"
 

@@ -12,6 +12,7 @@ import (
 type Request struct {
 	Req    *http.Request
 	Client *http.Client
+	*Args
 }
 
 // Args contains all request arg
@@ -36,12 +37,20 @@ func NewRequest() *Request {
 		client = new(http.Client)
 	}
 
-	return &Request{Client: client}
+	args := &Args{}
+	return &Request{Client: client, Args: args}
 }
 
 // GET
 func Get(url string, args *Args) (resp *Response, err error) {
 	resp, err = request("GET", url, args)
+	return
+}
+
+func (r *Request) Get(url string) (resp *Response, err error) {
+	if resp, err = r.coreRequest("GET", url); err != nil {
+		fmt.Println("core Request failed")
+	}
 	return
 }
 
@@ -57,7 +66,14 @@ func request(method string, url string, args *Args) (resp *Response, err error) 
 		fmt.Println("init request client failed")
 	}
 
-	if err = r.buildHTTPRequest(method, url, args); err != nil {
+	if resp, err = r.coreRequest(method, url); err != nil {
+		fmt.Println("core Request failed")
+	}
+	return
+}
+
+func (r *Request) coreRequest(method string, url string) (resp *Response, err error) {
+	if err = r.buildHTTPRequest(method, url); err != nil {
 		fmt.Println("build HTTP Request failed" + err.Error())
 	}
 
@@ -71,10 +87,10 @@ func request(method string, url string, args *Args) (resp *Response, err error) 
 	return
 }
 
-func (r *Request) buildHTTPRequest(method string, url string, args *Args) (err error) {
+func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	var body io.Reader
 
-	if body, err = r.buildBody(args); err != nil {
+	if body, err = r.buildBody(); err != nil {
 		return err
 	}
 
@@ -82,18 +98,20 @@ func (r *Request) buildHTTPRequest(method string, url string, args *Args) (err e
 		return err
 	}
 
-	buildHeaders(r, args)
-	buildURLParams(r, url, args)
-
-	SetTimeout(r, args)
+	buildHeaders(r)
+	buildURLParams(r, url)
+	SetTimeout(r)
 
 	return
 }
 
-func (r *Request) buildBody(args *Args) (body io.Reader, err error) {
+func (r *Request) buildBody() (body io.Reader, err error) {
 	datas := map[string]string{}
 
-	datas = args.Datas
+	if r.Datas == nil {
+		return nil, nil
+	}
+	datas = r.Datas
 
 	// build post Form data
 	Forms := url.Values{}
@@ -105,9 +123,4 @@ func (r *Request) buildBody(args *Args) (body io.Reader, err error) {
 	// build body
 	body = strings.NewReader(Forms.Encode())
 	return body, err
-}
-
-func SetTimeout(r *Request, args *Args) {
-	var n time.Duration = 10
-	r.Client.Timeout = time.Duration(n * time.Second)
 }

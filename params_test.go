@@ -26,6 +26,21 @@ func TestParams(t *testing.T) {
 	fmt.Println("Test Params end")
 }
 
+func TestRequestParamsGet(t *testing.T) {
+	url := "https://github.com"
+
+	r := NewRequest()
+	r.Params = PARAMS{
+		"user": "onesafe",
+	}
+	resp, _ := r.Get(url)
+	if !resp.isOk(resp.StatusCode) {
+		t.Error("Simple Get Failed")
+	}
+
+	fmt.Println(resp.Status)
+}
+
 func TestParseURL(t *testing.T) {
 	URL := "https://github.com?user=onesafe"
 	parsedURL, err := url.Parse(URL)
