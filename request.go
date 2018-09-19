@@ -21,6 +21,7 @@ type Args struct {
 	Params    PARAMS
 	Datas     DATAS
 	BasicAuth BasicAuth
+	Proxy     string
 }
 
 type HEADERS map[string]string
@@ -127,7 +128,14 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	}
 
 	buildHeaders(r)
-	buildURLParams(r, url)
+
+	if err = buildURLParams(r, url); err != nil {
+		fmt.Println("build URL Params Failed" + err.Error())
+	}
+
+	if err = buildProxy(r); err != nil {
+		fmt.Println("Set Proxy Failed" + err.Error())
+	}
 
 	return
 }
