@@ -52,7 +52,7 @@ err = resp.Json(&data)
   - Set Headers
   - Set Params
   - Set TimeOut
-  - Auth
+  - Authentication
 
 
 ### Set Headers
@@ -85,7 +85,7 @@ r.SetTimeout(10) // 10 Seconds
 resp, err := r.Get("https://github.com")
 ```
 
-### Auth
+### Authentication
 ```go
 r := requests.NewRequest()
 
