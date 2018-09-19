@@ -53,6 +53,7 @@ err = resp.Json(&data)
   - Set Params
   - Set TimeOut
   - Authentication
+  - Set Proxy
 
 
 ### Set Headers
@@ -91,5 +92,14 @@ r := requests.NewRequest()
 
 r.BasicAuth = requests.BasicAuth{"user", "passwd"}
 resp, err := r.Get("http://httpbin.org/basic-auth/user/passwd")
+```
+
+### Set Proxy
+```go
+r := requests.NewRequest()
+
+// use proxyUrl as your proxy
+r.Proxy = proxyUrl
+resp, err := r.Get("http://httpbin.org/get")
 ```
 
