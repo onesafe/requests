@@ -29,7 +29,7 @@ if !resp.isOk(resp.StatusCode) {
 ```go
 r := NewRequest()
 
-r.Datas := requests.DATAS{
+r.Datas = requests.DATAS{
 	"name": "test"
 }
 resp, err := r.Post("https://www.httpbin.org/post")
@@ -52,7 +52,7 @@ err = resp.Json(&data)
 ```go
 r := NewRequest()
 
-r.Headers := requests.HEADERS{
+r.Headers = requests.HEADERS{
 	"Referer":           "http://github.com",
 	"Accept-Language":   "zh-CN,zh;",
 	"Content-Type":      requests.ContentTypeJsonType,
@@ -64,8 +64,17 @@ resp, err := r.Get("https://www.baidu.com")
 ```go
 r := NewRequest()
 
-r.Params := requests.PARAMS{
+r.Params = requests.PARAMS{
 	"user":	"onesafe",
 }
 resp, err := r.Get("https://github.com")
 ```
+
+### Set TimeOut
+```go
+r := NewRequest()
+
+r.SetTimeout(10) // 10 Seconds
+resp, err := r.Get("https://github.com")
+```
+
