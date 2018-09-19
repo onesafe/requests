@@ -5,17 +5,12 @@ import (
 	"strings"
 )
 
-func buildURLParams(r *Request, URL string, args ...interface{}) (err error) {
-	params := []map[string]string{}
+func buildURLParams(r *Request, URL string, args *Args) (err error) {
+	params := map[string]string{}
 	var tempUrl string
 
 	// Get params from args
-	for _, arg := range args {
-		switch customType := arg.(type) {
-		case Params:
-			params = append(params, customType)
-		}
-	}
+	params = args.Params
 
 	parsedURL, err := url.Parse(URL)
 	if err != nil {
@@ -30,10 +25,8 @@ func buildURLParams(r *Request, URL string, args ...interface{}) (err error) {
 	}
 
 	// add params to Query
-	for _, param := range params {
-		for key, value := range param {
-			parsedQuery.Add(key, value)
-		}
+	for key, value := range params {
+		parsedQuery.Add(key, value)
 	}
 
 	// remove original query param

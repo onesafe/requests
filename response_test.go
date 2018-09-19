@@ -7,7 +7,7 @@ import (
 
 func TestContent(t *testing.T) {
 	url := "https://github.com"
-	resp, err := Get(url)
+	resp, err := Get(url, &Args{})
 	if err != nil {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
@@ -22,7 +22,7 @@ func TestContent(t *testing.T) {
 
 func TestText(t *testing.T) {
 	url := "https://httpbin.org"
-	resp, err := Get(url)
+	resp, err := Get(url, &Args{})
 	if err != nil {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
@@ -34,7 +34,7 @@ func TestJson(t *testing.T) {
 	url := "https://httpbin.org/json"
 	var data map[string]interface{}
 
-	resp, err := Get(url)
+	resp, err := Get(url, &Args{})
 	if err != nil {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}

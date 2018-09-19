@@ -8,8 +8,10 @@ import (
 func TestGet(t *testing.T) {
 	url := "https://www.baidu.com"
 
-	var n TimeOut = 10
-	resp, err := Get(url, n)
+	args := &Args{
+		TimeOut: 10,
+	}
+	resp, err := Get(url, args)
 	if err != nil {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
@@ -25,11 +27,15 @@ func TestGet(t *testing.T) {
 func TestPost(t *testing.T) {
 	url := "https://www.httpbin.org/post"
 
-	data := Datas{
+	data := DATAS{
 		"name": "post_test",
 	}
 
-	resp, _ := Post(url, data)
+	args := &Args{
+		Datas: data,
+	}
+
+	resp, _ := Post(url, args)
 	d, _ := resp.Text()
 	fmt.Println(d)
 }

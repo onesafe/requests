@@ -14,10 +14,17 @@ type Request struct {
 	Client *http.Client
 }
 
-type Headers map[string]string
-type Params map[string]string
-type TimeOut time.Duration
-type Datas map[string]string
+// Args contains all request arg
+type Args struct {
+	Headers HEADERS
+	Params  PARAMS
+	Datas   DATAS
+	TimeOut time.Duration
+}
+
+type HEADERS map[string]string
+type PARAMS map[string]string
+type DATAS map[string]string
 
 var (
 	client *http.Client
@@ -33,18 +40,18 @@ func NewRequest() *Request {
 }
 
 // GET
-func Get(url string, args ...interface{}) (resp *Response, err error) {
+func Get(url string, args *Args) (resp *Response, err error) {
 	resp, err = request("GET", url, args)
 	return
 }
 
 // POST
-func Post(url string, args ...interface{}) (resp *Response, err error) {
+func Post(url string, args *Args) (resp *Response, err error) {
 	resp, err = request("POST", url, args)
 	return
 }
 
-func request(method string, url string, args ...interface{}) (resp *Response, err error) {
+func request(method string, url string, args *Args) (resp *Response, err error) {
 	r := NewRequest()
 	if r.Client == nil {
 		fmt.Println("init request client failed")
@@ -64,7 +71,7 @@ func request(method string, url string, args ...interface{}) (resp *Response, er
 	return
 }
 
-func (r *Request) buildHTTPRequest(method string, url string, args ...interface{}) (err error) {
+func (r *Request) buildHTTPRequest(method string, url string, args *Args) (err error) {
 	var body io.Reader
 
 	if body, err = r.buildBody(args); err != nil {
@@ -83,22 +90,16 @@ func (r *Request) buildHTTPRequest(method string, url string, args ...interface{
 	return
 }
 
-func (r *Request) buildBody(args ...interface{}) (body io.Reader, err error) {
-	datas := []map[string]string{}
+func (r *Request) buildBody(args *Args) (body io.Reader, err error) {
+	datas := map[string]string{}
 
-	for _, arg := range args {
-		switch customType := arg.(type) {
-		case Datas:
-			datas = append(datas, customType)
-		}
-	}
+	datas = args.Datas
 
 	// build post Form data
 	Forms := url.Values{}
-	for _, data := range datas {
-		for key, value := range data {
-			Forms.Add(key, value)
-		}
+
+	for key, value := range datas {
+		Forms.Add(key, value)
 	}
 
 	// build body
@@ -106,13 +107,7 @@ func (r *Request) buildBody(args ...interface{}) (body io.Reader, err error) {
 	return body, err
 }
 
-func SetTimeout(r *Request, args ...interface{}) {
-	var n time.Duration
-	for _, arg := range args {
-		switch customType := arg.(type) {
-		case TimeOut:
-			n = time.Duration(customType)
-		}
-	}
+func SetTimeout(r *Request, args *Args) {
+	var n time.Duration = 10
 	r.Client.Timeout = time.Duration(n * time.Second)
 }

@@ -14,19 +14,14 @@ var ContentTypeFormURLEncodedType = "application/x-www-form-urlencoded; charset=
 var ContentTypeJsonType = "application/json; charset=utf-8"
 
 // construct Headers for request
-func buildHeaders(r *Request, args ...interface{}) {
+func buildHeaders(r *Request, args *Args) {
 
 	//Set default value to Headers
 	for k, v := range DefaultHeaders {
 		r.Req.Header.Set(k, v)
 	}
 
-	for _, arg := range args {
-		switch customType := arg.(type) {
-		case Headers:
-			for k, v := range customType {
-				r.Req.Header.Set(k, v)
-			}
-		}
+	for k, v := range args.Headers {
+		r.Req.Header.Set(k, v)
 	}
 }

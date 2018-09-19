@@ -7,11 +7,14 @@ import (
 )
 
 func TestParams(t *testing.T) {
-	p := Params{
+	p := PARAMS{
 		"user": "onesafe",
 	}
+	args := &Args{
+		Params: p,
+	}
 
-	resp, err := Get("https://github.com", p)
+	resp, err := Get("https://github.com", args)
 	if err != nil {
 		t.Error("[GET] failed " + err.Error())
 	}
