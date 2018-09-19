@@ -17,14 +17,21 @@ type Request struct {
 
 // Args contains all request arg
 type Args struct {
-	Headers HEADERS
-	Params  PARAMS
-	Datas   DATAS
+	Headers   HEADERS
+	Params    PARAMS
+	Datas     DATAS
+	BasicAuth BasicAuth
 }
 
 type HEADERS map[string]string
 type PARAMS map[string]string
 type DATAS map[string]string
+
+// BasicAuth struct for http basic auth
+type BasicAuth struct {
+	Username string
+	Password string
+}
 
 var (
 	client       *http.Client
@@ -115,6 +122,10 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 		return err
 	}
 
+	if r.BasicAuth.Username != "" {
+		r.SetBasicAuth(r.BasicAuth.Username, r.BasicAuth.Password)
+	}
+
 	buildHeaders(r)
 	buildURLParams(r, url)
 
@@ -137,6 +148,12 @@ func (r *Request) buildBody() (body io.Reader, err error) {
 	return body, err
 }
 
+// Set Request TimeOut
 func (r *Request) SetTimeout(n time.Duration) {
 	r.Client.Timeout = time.Duration(n * time.Second)
+}
+
+// Set Basic Auth
+func (r *Request) SetBasicAuth(Username string, Password string) {
+	r.Req.SetBasicAuth(Username, Password)
 }

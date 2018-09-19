@@ -68,3 +68,14 @@ func TestRequestPost(t *testing.T) {
 	d, _ := resp.Text()
 	fmt.Println(d)
 }
+
+func TestBasicAuth(t *testing.T) {
+	r := NewRequest()
+	r.BasicAuth = BasicAuth{"user", "passwd"}
+	resp, err := r.Get("http://httpbin.org/basic-auth/user/passwd")
+	if err != nil {
+		t.Error(err.Error())
+	}
+	d, _ := resp.Text()
+	fmt.Println(d)
+}
