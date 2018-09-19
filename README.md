@@ -17,7 +17,14 @@ import (
 
 ### GET
 ```go
-resp, err := requests.Get("https://github.com")
+// if no args need to specify, you can directly use requests.Get
+resp, _ := requests.Get("https://github.com")
+text, _ := resp.Text()
+```
+
+```go
+r := NewRequest()
+resp, err := r.Get("https://github.com")
 
 if !resp.isOk(resp.StatusCode) {
 	return errors.New("Get Failed")
@@ -34,22 +41,22 @@ err = resp.Json(&data)
 
 ### Set Headers
 ```go
-url := "https://www.baidu.com"
-	
-h := requests.Headers{
+r := NewRequest()
+
+r.Headers := requests.HEADERS{
 	"Referer":           "http://github.com",
 	"Accept-Language":   "zh-CN,zh;",
 	"Content-Type":      requests.ContentTypeJsonType,
 }
-resp, err := requests.Get(url, h)
+resp, err := r.Get("https://www.baidu.com")
 ```
 
 ### Set Params
 ```go
-url := "https://github.com"
+r := NewRequest()
 
-p := requests.Params{
+r.Params := requests.PARAMS{
 	"user":	"onesafe",
 }
-resp, err := requests.Get(url, p)
+resp, err := r.Get("https://github.com")
 ```
