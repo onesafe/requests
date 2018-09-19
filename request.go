@@ -20,7 +20,6 @@ type Args struct {
 	Headers HEADERS
 	Params  PARAMS
 	Datas   DATAS
-	TimeOut time.Duration
 }
 
 type HEADERS map[string]string
@@ -57,6 +56,13 @@ func (r *Request) Get(url string) (resp *Response, err error) {
 // POST
 func Post(url string, args *Args) (resp *Response, err error) {
 	resp, err = request("POST", url, args)
+	return
+}
+
+func (r *Request) Post(url string) (resp *Response, err error) {
+	if resp, err = r.coreRequest("POST", url); err != nil {
+		fmt.Println("core Request failed")
+	}
 	return
 }
 
@@ -100,7 +106,6 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 
 	buildHeaders(r)
 	buildURLParams(r, url)
-	SetTimeout(r)
 
 	return
 }
@@ -123,4 +128,8 @@ func (r *Request) buildBody() (body io.Reader, err error) {
 	// build body
 	body = strings.NewReader(Forms.Encode())
 	return body, err
+}
+
+func (r *Request) SetTimeout(n time.Duration) {
+	r.Client.Timeout = time.Duration(n * time.Second)
 }

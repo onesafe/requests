@@ -3,7 +3,6 @@ package requests
 import (
 	"net/url"
 	"strings"
-	"time"
 )
 
 func buildURLParams(r *Request, URL string) (err error) {
@@ -50,10 +49,4 @@ func buildURLParams(r *Request, URL string) (err error) {
 	// URL with Query params
 	r.Req.URL = destUrl
 	return
-}
-
-func SetTimeout(r *Request) {
-	var n time.Duration
-	n = r.TimeOut
-	r.Client.Timeout = time.Duration(n * time.Second)
 }
