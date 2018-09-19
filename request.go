@@ -27,16 +27,26 @@ type PARAMS map[string]string
 type DATAS map[string]string
 
 var (
-	client *http.Client
-	req    *http.Request
+	client       *http.Client
+	req          *http.Request
+	maxIdleConns int = 10
 )
 
 func NewRequest() *Request {
-	if client == nil {
-		client = new(http.Client)
+	args := &Args{}
+
+	if client != nil {
+		return &Request{Client: client, Args: args}
 	}
 
-	args := &Args{}
+	transport := &http.Transport{
+		MaxIdleConns:    maxIdleConns,
+		IdleConnTimeout: 30 * time.Second,
+	}
+	client = &http.Client{
+		Transport: transport,
+	}
+
 	return &Request{Client: client, Args: args}
 }
 
@@ -78,6 +88,7 @@ func request(method string, url string, args *Args) (resp *Response, err error) 
 	return
 }
 
+// Below are Request Struct Functions
 func (r *Request) coreRequest(method string, url string) (resp *Response, err error) {
 	if err = r.buildHTTPRequest(method, url); err != nil {
 		fmt.Println("build HTTP Request failed" + err.Error())
