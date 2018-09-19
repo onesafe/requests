@@ -17,18 +17,26 @@ import (
 
 ### GET
 ```go
-// if no args need to specify, you can directly use requests.Get
-resp, _ := requests.Get("https://github.com")
-text, _ := resp.Text()
-```
-
-```go
 r := NewRequest()
-resp, err := r.Get("https://github.com")
 
+resp, err := r.Get("https://github.com")
 if !resp.isOk(resp.StatusCode) {
 	return errors.New("Get Failed")
 }
+```
+
+### POST
+```go
+r := NewRequest()
+
+r.Datas := requests.DATAS{
+	"name": "test"
+}
+resp, err := r.Post("https://www.httpbin.org/post")
+```
+
+### Response
+```go
 // content type: byte[]
 content, err := resp.Content()
 
@@ -36,6 +44,7 @@ content, err := resp.Content()
 text, err := resp.Text()
 
 // data type can be: map[string]interface{}
+var data map[string]string
 err = resp.Json(&data)
 ```
 
