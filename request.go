@@ -111,17 +111,13 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 }
 
 func (r *Request) buildBody() (body io.Reader, err error) {
-	datas := map[string]string{}
-
 	if r.Datas == nil {
 		return nil, nil
 	}
-	datas = r.Datas
 
 	// build post Form data
 	Forms := url.Values{}
-
-	for key, value := range datas {
+	for key, value := range r.Datas {
 		Forms.Add(key, value)
 	}
 
