@@ -54,6 +54,7 @@ err = resp.Json(&data)
   - Set TimeOut
   - Authentication
   - Set Proxy
+  - Set Pool Size
 
 
 ### Set Headers
@@ -103,3 +104,10 @@ r.Proxy = proxyUrl
 resp, err := r.Get("http://httpbin.org/get")
 ```
 
+### Set Pool Size
+```go
+r := requests.NewRequest()
+
+r.SetPoolSize(30) // Default Pool Size is 10 (int)
+resp, err := r.Get("http://github.com")
+```
