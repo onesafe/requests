@@ -66,7 +66,7 @@ func Get(url string, args *Args) (resp *Response, err error) {
 
 func (r *Request) Get(url string) (resp *Response, err error) {
 	if resp, err = r.coreRequest("GET", url); err != nil {
-		fmt.Println("core Request failed")
+		fmt.Println("[GET] core Request failed")
 	}
 	return
 }
@@ -79,7 +79,46 @@ func Post(url string, args *Args) (resp *Response, err error) {
 
 func (r *Request) Post(url string) (resp *Response, err error) {
 	if resp, err = r.coreRequest("POST", url); err != nil {
-		fmt.Println("core Request failed")
+		fmt.Println("[POST] core Request failed")
+	}
+	return
+}
+
+// PUT
+func Put(url string, args *Args) (resp *Response, err error) {
+	resp, err = request("PUT", url, args)
+	return
+}
+
+func (r *Request) Put(url string) (resp *Response, err error) {
+	if resp, err = r.coreRequest("PUT", url); err != nil {
+		fmt.Println("[PUT] core Request failed")
+	}
+	return
+}
+
+// PATCH
+func Patch(url string, args *Args) (resp *Response, err error) {
+	resp, err = request("PATCH", url, args)
+	return
+}
+
+func (r *Request) Patch(url string) (resp *Response, err error) {
+	if resp, err = r.coreRequest("PATCH", url); err != nil {
+		fmt.Println("[PATCH] core Request failed")
+	}
+	return
+}
+
+// DELETE
+func Delete(url string, args *Args) (resp *Response, err error) {
+	resp, err = request("DELETE", url, args)
+	return
+}
+
+func (r *Request) Delete(url string) (resp *Response, err error) {
+	if resp, err = r.coreRequest("DELETE", url); err != nil {
+		fmt.Println("[DELETE] core Request failed")
 	}
 	return
 }

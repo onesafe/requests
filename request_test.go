@@ -80,3 +80,32 @@ func TestBasicAuth(t *testing.T) {
 	d, _ := resp.Text()
 	fmt.Println(d)
 }
+
+func TestPut(t *testing.T) {
+	r := NewRequest()
+	url := "http://httpbin.org/put"
+
+	r.Datas = DATAS{"put": "test"}
+	resp, _ := r.Put(url)
+	data, _ := resp.Text()
+	fmt.Println(data)
+}
+
+func TestDelete(t *testing.T) {
+	r := NewRequest()
+	url := "http://httpbin.org/delete"
+
+	resp, _ := r.Delete(url)
+	data, _ := resp.Text()
+	fmt.Println(data)
+}
+
+func TestPatch(t *testing.T) {
+	r := NewRequest()
+	url := "http://httpbin.org/patch"
+
+	r.Datas = DATAS{"patch": "test"}
+	resp, _ := r.Patch(url)
+	data, _ := resp.Text()
+	fmt.Println(data)
+}
