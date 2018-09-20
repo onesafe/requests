@@ -205,6 +205,14 @@ func (r *Request) SetBasicAuth(Username string, Password string) {
 	r.Req.SetBasicAuth(Username, Password)
 }
 
+// Set Connection Pool Size
+func (r *Request) SetPoolSize(size int) {
+	r.Client.Transport = &http.Transport{
+		MaxIdleConns:    size,
+		IdleConnTimeout: 30 * time.Second,
+	}
+}
+
 // Reset client and Args to default values
 func (r *Request) Reset() {
 	_CLIENT = nil

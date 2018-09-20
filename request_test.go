@@ -26,6 +26,7 @@ func TestRequestGet(t *testing.T) {
 	url := "https://www.baidu.com"
 
 	r := NewRequest()
+	r.SetPoolSize(50)
 
 	resp, _ := r.Get(url)
 	if !resp.isOk(resp.StatusCode) {
