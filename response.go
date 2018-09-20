@@ -1,9 +1,9 @@
 package requests
 
 import (
-	"encoding/json"
-	"compress/zlib"
 	"compress/gzip"
+	"compress/zlib"
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -66,4 +66,15 @@ func (resp *Response) isOk(code int) bool {
 		return true
 	}
 	return false
+}
+
+// Same as Text() func, but toString func ignore error, it is more easy to test
+func (resp *Response) toString() (text string) {
+	text = Fn(resp.Text)
+	return
+}
+
+func Fn(f func() (string, error)) (res string) {
+	res, _ = f()
+	return
 }

@@ -48,3 +48,12 @@ func TestJson(t *testing.T) {
 		fmt.Println(k, v)
 	}
 }
+func TestToString(t *testing.T) {
+	url := "https://github.com"
+	resp, err := Get(url, &Args{})
+	if err != nil {
+		fmt.Println("[GET] Failed while request url: " + url)
+	}
+
+	fmt.Println(resp.toString())
+}
