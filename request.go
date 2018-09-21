@@ -23,11 +23,13 @@ type Args struct {
 	BasicAuth BasicAuth
 	Proxy     string
 	Hooks     []Hook
+	Cookies   COOKIES
 }
 
 type HEADERS map[string]string
 type PARAMS map[string]string
 type DATAS map[string]string
+type COOKIES map[string]string
 
 // BasicAuth struct for http basic auth
 type BasicAuth struct {
@@ -186,7 +188,7 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	}
 
 	buildHeaders(r)
-
+	
 	if err = buildURLParams(r, url); err != nil {
 		fmt.Println("build URL Params Failed" + err.Error())
 	}
@@ -194,6 +196,8 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	if err = buildProxy(r); err != nil {
 		fmt.Println("Set Proxy Failed" + err.Error())
 	}
+
+	buildCookies(r)
 
 	return
 }
@@ -241,5 +245,7 @@ func (r *Request) Reset() {
 	r.Datas = nil
 	r.Proxy = ""
 	r.BasicAuth = BasicAuth{}
+	r.Cookies = nil
+	r.Hooks = []Hook{}
 	return
 }
