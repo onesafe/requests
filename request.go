@@ -22,6 +22,7 @@ type Args struct {
 	Datas     DATAS
 	BasicAuth BasicAuth
 	Proxy     string
+	Hooks     []Hook
 }
 
 type HEADERS map[string]string
@@ -141,10 +142,28 @@ func (r *Request) coreRequest(method string, url string) (resp *Response, err er
 		fmt.Println("build HTTP Request failed" + err.Error())
 	}
 
+	// apply BeforeRequest Hook
+	s, err := applyBeforeReqHooks(r.Req, r.Hooks)
+	if err != nil {
+		return nil, err
+	} else if s != nil {
+		resp = &Response{s, nil}
+		return resp, err
+	}
+
 	res, err := r.Client.Do(r.Req)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
+	}
+
+	// apply AfterRequest hook
+	newResp, newErr := applyAfterReqHooks(r.Req, res, err, r.Hooks)
+	if newErr != nil {
+		err = newErr
+	}
+	if newResp != nil {
+		res = newResp
 	}
 
 	resp = &Response{res, nil}
