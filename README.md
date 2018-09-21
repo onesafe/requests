@@ -56,6 +56,7 @@ err = resp.Json(&data)
   - Set Proxy
   - Set Pool Size
   - Hooks
+  - Cookies
 
 
 ### Set Headers
@@ -138,7 +139,30 @@ func (h *hookNothing) AfterRequest(req *http.Request, resp *http.Response, err e
 	return
 }
 r := requests.NewRequest()
-r.Hooks = []requests.Hook{h}
 
+r.Hooks = []requests.Hook{h}
 resp, _ := r.Get("https://httpbin.org/get")
+```
+
+### Cookies
+Set Cookies
+```go
+r := requests.NewRequest()
+
+r.Cookies = requests.COOKIES{
+	"key": "value",
+	"a": "123",
+}
+resp, _ := r.Get("https://httpbin.org/cookies")
+```
+
+Get Cookies
+```go
+r := requests.NewRequest()
+
+resp, _ := r.Get("https://www.httpbin.org")
+coo := resp.Cookies()
+for _, c := range coo {
+	fmt.Println(c.Name, c.Value)
+}
 ```
