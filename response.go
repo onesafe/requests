@@ -11,6 +11,7 @@ import (
 
 type Response struct {
 	*http.Response
+	*Request
 	content []byte
 }
 
@@ -66,6 +67,14 @@ func (resp *Response) isOk(code int) bool {
 		return true
 	}
 	return false
+}
+
+func (resp *Response) Cookies() (cookies []*http.Cookie) {
+	if resp.Client.Jar == nil {
+		return
+	}
+	cookies = resp.Client.Jar.Cookies(resp.Req.URL)
+	return
 }
 
 // Same as Text() func, but toString func ignore error, it is more easy to test

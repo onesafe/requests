@@ -149,7 +149,7 @@ func (r *Request) coreRequest(method string, url string) (resp *Response, err er
 	if err != nil {
 		return nil, err
 	} else if s != nil {
-		resp = &Response{s, nil}
+		resp = &Response{s, r, nil}
 		return resp, err
 	}
 
@@ -168,7 +168,7 @@ func (r *Request) coreRequest(method string, url string) (resp *Response, err er
 		res = newResp
 	}
 
-	resp = &Response{res, nil}
+	resp = &Response{res, r, nil}
 	return
 }
 
