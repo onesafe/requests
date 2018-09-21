@@ -56,7 +56,7 @@ func TestToString(t *testing.T) {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
 
-	//fmt.Println(resp.toString())
+	fmt.Println(resp.toString())
 }
 
 func TestGetCookies(t *testing.T) {
