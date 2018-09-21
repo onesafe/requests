@@ -55,6 +55,7 @@ err = resp.Json(&data)
   - Authentication
   - Set Proxy
   - Set Pool Size
+  - Hooks
 
 
 ### Set Headers
@@ -110,4 +111,34 @@ r := requests.NewRequest()
 
 r.SetPoolSize(30) // Default Pool Size is 10 (int)
 resp, err := r.Get("http://github.com")
+```
+
+### Hooks
+```go
+// You can use your own struct to implements this two functions
+
+// BeforeRequest will call before send http request
+BeforeRequest(req *http.Request) (resp *http.Response, err error)
+
+// AfterRequest will call after got response
+AfterRequest(req *http.Request, resp *http.Response, err error) (newResp *http.Response, newErr error)
+
+type hookNothing struct {
+	callBeforeHook bool
+	callAfterHook bool
+}
+
+func (h *hookNothing) BeforeRequest(req *http.Request) (resp *http.Response, err error) {
+	h.callBeforeHook = true
+	return
+}
+
+func (h *hookNothing) AfterRequest(req *http.Request, resp *http.Response, err error) (newResp *http.Response, newErr error) {
+	h.callAfterHook = true
+	return
+}
+r := requests.NewRequest()
+r.Hooks = []requests.Hook{h}
+
+resp, _ := r.Get("https://httpbin.org/get")
 ```
