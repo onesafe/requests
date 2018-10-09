@@ -48,6 +48,7 @@ func TestJson(t *testing.T) {
 		fmt.Println(k, v)
 	}
 }
+
 func TestToString(t *testing.T) {
 	url := "https://github.com"
 	resp, err := Get(url, &Args{})
@@ -57,3 +58,14 @@ func TestToString(t *testing.T) {
 
 	fmt.Println(resp.ToString())
 }
+
+func TestGetCookies(t *testing.T) {
+	r := NewRequest()
+	resp, _ := r.Get("https://www.httpbin.org")
+
+	coo := resp.Cookies()
+
+	for _, c := range coo {
+		fmt.Println(c.Name, c.Value)
+	}
+} 

@@ -22,11 +22,14 @@ type Args struct {
 	Datas     DATAS
 	BasicAuth BasicAuth
 	Proxy     string
+	Hooks     []Hook
+	Cookies   COOKIES
 }
 
 type HEADERS map[string]string
 type PARAMS map[string]string
 type DATAS map[string]string
+type COOKIES map[string]string
 
 // BasicAuth struct for http basic auth
 type BasicAuth struct {
@@ -141,13 +144,31 @@ func (r *Request) coreRequest(method string, url string) (resp *Response, err er
 		fmt.Println("build HTTP Request failed" + err.Error())
 	}
 
+	// apply BeforeRequest Hook
+	s, err := applyBeforeReqHooks(r.Req, r.Hooks)
+	if err != nil {
+		return nil, err
+	} else if s != nil {
+		resp = &Response{s, r, nil}
+		return resp, err
+	}
+
 	res, err := r.Client.Do(r.Req)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
 
-	resp = &Response{res, nil}
+	// apply AfterRequest hook
+	newResp, newErr := applyAfterReqHooks(r.Req, res, err, r.Hooks)
+	if newErr != nil {
+		err = newErr
+	}
+	if newResp != nil {
+		res = newResp
+	}
+
+	resp = &Response{res, r, nil}
 	return
 }
 
@@ -167,7 +188,7 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	}
 
 	buildHeaders(r)
-
+	
 	if err = buildURLParams(r, url); err != nil {
 		fmt.Println("build URL Params Failed" + err.Error())
 	}
@@ -175,6 +196,8 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	if err = buildProxy(r); err != nil {
 		fmt.Println("Set Proxy Failed" + err.Error())
 	}
+
+	buildCookies(r)
 
 	return
 }
@@ -205,6 +228,14 @@ func (r *Request) SetBasicAuth(Username string, Password string) {
 	r.Req.SetBasicAuth(Username, Password)
 }
 
+// Set Connection Pool Size
+func (r *Request) SetPoolSize(size int) {
+	r.Client.Transport = &http.Transport{
+		MaxIdleConns:    size,
+		IdleConnTimeout: 30 * time.Second,
+	}
+}
+
 // Reset client and Args to default values
 func (r *Request) Reset() {
 	_CLIENT = nil
@@ -214,5 +245,7 @@ func (r *Request) Reset() {
 	r.Datas = nil
 	r.Proxy = ""
 	r.BasicAuth = BasicAuth{}
+	r.Cookies = nil
+	r.Hooks = []Hook{}
 	return
 }
