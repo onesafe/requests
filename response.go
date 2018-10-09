@@ -60,7 +60,7 @@ func (resp *Response) Json(v interface{}) (err error) {
 }
 
 // Check request success or fail
-func (resp *Response) isOk(code int) bool {
+func (resp *Response) IsOk(code int) bool {
 	switch code {
 	case 200, 201, 202:
 		return true
@@ -69,7 +69,7 @@ func (resp *Response) isOk(code int) bool {
 }
 
 // Same as Text() func, but toString func ignore error, it is more easy to test
-func (resp *Response) toString() (text string) {
+func (resp *Response) ToString() (text string) {
 	text = Fn(resp.Text)
 	return
 }

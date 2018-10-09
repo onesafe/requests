@@ -39,7 +39,7 @@ func TestJson(t *testing.T) {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
 
-	if resp.isOk(resp.StatusCode) {
+	if resp.IsOk(resp.StatusCode) {
 		fmt.Println("Request successed")
 	}
 	resp.Json(&data)
@@ -55,5 +55,5 @@ func TestToString(t *testing.T) {
 		fmt.Println("[GET] Failed while request url: " + url)
 	}
 
-	fmt.Println(resp.toString())
+	fmt.Println(resp.ToString())
 }
