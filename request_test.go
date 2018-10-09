@@ -17,7 +17,7 @@ func TestGet(t *testing.T) {
 	fmt.Println(resp.StatusCode)
 	fmt.Println(resp.Header)
 
-	if !resp.isOk(resp.StatusCode) {
+	if !resp.IsOk(resp.StatusCode) {
 		t.Error("Simple Get Failed")
 	}
 }
@@ -29,7 +29,7 @@ func TestRequestGet(t *testing.T) {
 	r.SetPoolSize(50)
 
 	resp, _ := r.Get(url)
-	if !resp.isOk(resp.StatusCode) {
+	if !resp.IsOk(resp.StatusCode) {
 		t.Error("Simple Get Failed")
 	}
 

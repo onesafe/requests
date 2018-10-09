@@ -24,6 +24,7 @@ type Args struct {
 	Proxy     string
 	Hooks     []Hook
 	Cookies   COOKIES
+	Body      string
 }
 
 type HEADERS map[string]string
@@ -188,7 +189,7 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 	}
 
 	buildHeaders(r)
-	
+
 	if err = buildURLParams(r, url); err != nil {
 		fmt.Println("build URL Params Failed" + err.Error())
 	}
@@ -207,14 +208,19 @@ func (r *Request) buildBody() (body io.Reader, err error) {
 		return nil, nil
 	}
 
-	// build post Form data
-	Forms := url.Values{}
-	for key, value := range r.Datas {
-		Forms.Add(key, value)
-	}
+	// if r.Body exist, use r.Body as request Body
+	if r.Body != "" {
+		body = strings.NewReader(r.Body)
+	} else {
+		// build post Form data
+		Forms := url.Values{}
+		for key, value := range r.Datas {
+			Forms.Add(key, value)
+		}
 
-	// build body
-	body = strings.NewReader(Forms.Encode())
+		// build body
+		body = strings.NewReader(Forms.Encode())
+	}
 	return body, err
 }
 
@@ -247,5 +253,6 @@ func (r *Request) Reset() {
 	r.BasicAuth = BasicAuth{}
 	r.Cookies = nil
 	r.Hooks = []Hook{}
+	r.Body = ""
 	return
 }
