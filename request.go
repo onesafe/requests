@@ -204,23 +204,25 @@ func (r *Request) buildHTTPRequest(method string, url string) (err error) {
 }
 
 func (r *Request) buildBody() (body io.Reader, err error) {
-	if r.Datas == nil {
-		return nil, nil
-	}
 
 	// if r.Body exist, use r.Body as request Body
 	if r.Body != "" {
 		body = strings.NewReader(r.Body)
-	} else {
-		// build post Form data
-		Forms := url.Values{}
-		for key, value := range r.Datas {
-			Forms.Add(key, value)
-		}
-
-		// build body
-		body = strings.NewReader(Forms.Encode())
+		return body, err
 	}
+
+	if r.Datas == nil {
+		return nil, nil
+	}
+
+	// build post Form data
+	Forms := url.Values{}
+	for key, value := range r.Datas {
+		Forms.Add(key, value)
+	}
+
+	// build body
+	body = strings.NewReader(Forms.Encode())
 	return body, err
 }
 
