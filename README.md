@@ -34,6 +34,15 @@ r.Datas = requests.DATAS{
 }
 resp, err := r.Post("https://www.httpbin.org/post")
 ```
+or
+```go
+r := requests.NewRequest()
+
+// requestBody can be any struct (interface{})
+res, _ := json.Marshal(requestBody)
+r.Body = string(res)
+resp, err := r.Post("https://www.httpbin.org/post")
+```
 
 ### Response
 ```go
